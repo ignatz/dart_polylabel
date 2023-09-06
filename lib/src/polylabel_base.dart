@@ -11,7 +11,11 @@ PolylabelResult polylabel(
   Polygon polygon, {
   double precision = 1.0,
   bool debug = false,
+  int followNBestCandidates = 4,
 }) {
+  if (followNBestCandidates > 4 || followNBestCandidates < 1) {
+    throw Exception("followBestNCandidates must be in [1..4].");
+  }
   if (polygon.isEmpty || polygon[0].isEmpty) {
     return _empty;
   }
@@ -75,19 +79,21 @@ PolylabelResult polylabel(
 
     // do not drill down further if there's no chance of a better solution
     if (cell.max - bestCell.d <= precision) {
+      // Note: break or continue makes very little difference since all the
+      // expensive work has already been done by computing cell.max and
+      // therefore the distance for sorting the queue.
       continue;
     }
 
     // split the cell into four cells
     final h = cell.h / 2;
-    cellQueue.add(Cell(cell.x - h, cell.y - h, h, polygon));
-    cellQueue.add(Cell(cell.x + h, cell.y - h, h, polygon));
-    cellQueue.add(Cell(cell.x - h, cell.y + h, h, polygon));
-    cellQueue.add(Cell(cell.x + h, cell.y + h, h, polygon));
-  }
+    final cells = List<Cell>.generate(4, (i) {
+      final (dx, dy) = _quadrants[i];
+      return Cell(cell.x + (dx * h), cell.y + (dy * h), h, polygon);
+    });
 
-  if (debug) {
-    print('best distance: ${bestCell.d}');
+    cells.sort((a, b) => b.max.compareTo(a.max));
+    cellQueue.addAll(cells.take(followNBestCandidates));
   }
 
   return PolylabelResult(Point<double>(bestCell.x, bestCell.y), bestCell.d);
@@ -117,3 +123,4 @@ Cell _getCentroidCell(Polygon polygon) {
 }
 
 const _empty = PolylabelResult(Point<double>(0, 0), 0);
+const _quadrants = [(-1, -1), (1, -1), (-1, 1), (1, 1)];

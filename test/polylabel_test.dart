@@ -27,9 +27,9 @@ void main() {
     test('finds pole of inaccessibility for water1 and precision 1', () {
       final watch = Stopwatch()..start();
 
-      const N = 50;
+      const N = 100;
       for (int i = 0; i < N; ++i) {
-        final p = polylabel(water1, precision: 1);
+        final p = polylabel(water1, precision: 1, followNBestCandidates: 1);
         expect(p.point, Point(3865.85009765625, 2124.87841796875));
         expect(p.distance, 288.8493574779127);
       }
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('finds pole of inaccessibility for water1 and precision 50', () {
-      final p = polylabel(water1, precision: 50);
+      final p = polylabel(water1, precision: 50, followNBestCandidates: 1);
       expect(p.point, Point(3854.296875, 2123.828125));
       expect(p.distance, 278.5795872381558);
     });
