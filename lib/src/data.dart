@@ -1,9 +1,24 @@
-import 'dart:math' show min, sqrt, sqrt2, Point;
+import 'dart:math' show min, sqrt, sqrt2;
 
-typedef Polygon = List<List<Point<double>>>;
+class PointDouble {
+  final double x;
+  final double y;
+
+  const PointDouble(this.x, this.y);
+
+  @override
+  bool operator==(Object other) {
+    return other is PointDouble && x == other.x && y == other.y;
+  }
+
+  @override
+  int get hashCode => Object.hash(x, y);
+}
+
+typedef Polygon = List<List<PointDouble>>;
 
 class PolylabelResult {
-  final Point<double> point;
+  final PointDouble point;
   final double distance;
 
   const PolylabelResult(this.point, this.distance);
@@ -57,8 +72,8 @@ double pointToPolygonDist(final double x, final double y, Polygon polygon) {
 double getSegDistSq(
   final double px,
   final double py,
-  Point<double> a,
-  Point<double> b,
+  PointDouble a,
+  PointDouble b,
 ) {
   double x = a.x;
   double y = a.y;

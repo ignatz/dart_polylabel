@@ -4,4 +4,4 @@
 library polylabel;
 
 export 'src/polylabel_base.dart';
-export 'src/data.dart' show PolylabelResult;
+export 'src/data.dart' show PolylabelResult, PointDouble;

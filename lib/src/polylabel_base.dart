@@ -1,4 +1,4 @@
-import 'dart:math' show min, Point;
+import 'dart:math' show min;
 import 'package:collection/collection.dart';
 
 import 'data.dart';
@@ -96,7 +96,7 @@ PolylabelResult polylabel(
     cellQueue.addAll(cells.take(followNBestCandidates));
   }
 
-  return PolylabelResult(Point<double>(bestCell.x, bestCell.y), bestCell.d);
+  return PolylabelResult(PointDouble(bestCell.x, bestCell.y), bestCell.d);
 }
 
 /// Get polygon centroid
@@ -122,5 +122,5 @@ Cell _getCentroidCell(Polygon polygon) {
   return Cell(x / area, y / area, 0, polygon);
 }
 
-const _empty = PolylabelResult(Point<double>(0, 0), 0);
+const _empty = PolylabelResult(PointDouble(0, 0), 0);
 const _quadrants = [(-1, -1), (1, -1), (-1, 1), (1, 1)];
